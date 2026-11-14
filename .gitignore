@@ -1,0 +1,44 @@
+# ===========================
+# .NET / Backend
+# ===========================
+# Build results
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+build/
+bld/
+[Oo]ut/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ===========================
+# Logs (Serilog)
+# ===========================
+Logs/
+*.log
+
+# ===========================
+# Frontend (React/Vue/Angular)
+# ===========================
+node_modules/
+dist/
+build/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ===========================
+# OS Files
+# ===========================
+.DS_Store
+Thumbs.db
