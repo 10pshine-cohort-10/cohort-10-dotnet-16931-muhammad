@@ -17,6 +17,7 @@ public class TokenService : ITokenService
 
     public TokenService(IConfiguration config)
     {
+        ArgumentNullException.ThrowIfNull(config);
         _config = config;
 
         var jwt = _config.GetSection("Jwt");
@@ -38,6 +39,8 @@ public class TokenService : ITokenService
 
     public (string token, DateTime expiresAt) CreateToken(User user)
     {
+        ArgumentNullException.ThrowIfNull(user);
+
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var expires = DateTime.UtcNow.AddMinutes(_expiresMinutes);
