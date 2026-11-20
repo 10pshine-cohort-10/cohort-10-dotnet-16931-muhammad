@@ -20,7 +20,13 @@ public static class ServiceExtensions
     public static IServiceCollection AddJwtAuth(this IServiceCollection services, IConfiguration cfg)
     {
         var jwt = cfg.GetSection("Jwt");
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!));
+
+        var signingKey = jwt["Key"]
+            ?? throw new InvalidOperationException("Missing required configuration value 'Jwt:Key'.");
+        if (signingKey.Length == 0)
+            throw new InvalidOperationException("Configuration value 'Jwt:Key' must not be empty.");
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey));
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
