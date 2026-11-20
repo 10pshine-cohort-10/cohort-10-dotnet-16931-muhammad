@@ -9,7 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 // 1. Serilog Configuration
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
-    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.Async(a => a.File(
+        "Logs/log-.txt",
+        rollingInterval: RollingInterval.Day))
     .CreateLogger();
 builder.Host.UseSerilog();
 
@@ -45,9 +47,7 @@ builder.Services.AddCors(o => o.AddPolicy("AllowAll", p =>
     p.WithOrigins(
         "http://localhost:5173",
         "https://localhost:7123",
-        "http://localhost:5253",
-        "https://developers.merchantlify.com"
-
+        "http://localhost:5253"
     )
     .AllowAnyHeader()
     .AllowAnyMethod()));
@@ -78,4 +78,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-app.Run();
+// 7. Run with guaranteed log flush on shutdown
+try
+{
+    app.Run();
+}
+finally
+{
+    Log.CloseAndFlush();
+}

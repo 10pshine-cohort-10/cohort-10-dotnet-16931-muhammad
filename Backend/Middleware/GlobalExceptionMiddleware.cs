@@ -32,13 +32,21 @@ public class GlobalExceptionMiddleware
                 _ => (int)HttpStatusCode.InternalServerError
             };
 
+            var message = ex switch
+            {
+                UnauthorizedAccessException => ex.Message,
+                InvalidOperationException => ex.Message,
+                KeyNotFoundException => ex.Message,
+                _ => "An unexpected error occurred. Please try again later."
+            };
+
             context.Response.StatusCode = status;
             context.Response.ContentType = "application/json";
 
             var payload = JsonSerializer.Serialize(new
             {
                 statusCode = status,
-                message = ex.Message
+                message
             });
 
             await context.Response.WriteAsync(payload);

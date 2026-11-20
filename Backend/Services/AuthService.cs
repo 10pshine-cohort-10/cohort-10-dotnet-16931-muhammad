@@ -15,6 +15,10 @@ public class AuthService : IAuthService
 
     public AuthService(AppDbContext db, ITokenService tokenService, ILogger<AuthService> logger)
     {
+        ArgumentNullException.ThrowIfNull(db);
+        ArgumentNullException.ThrowIfNull(tokenService);
+        ArgumentNullException.ThrowIfNull(logger);
+
         _db = db;
         _tokenService = tokenService;
         _logger = logger;
@@ -22,6 +26,8 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
     {
+        ArgumentNullException.ThrowIfNull(dto);
+
         var exists = await _db.Users.AnyAsync(u => u.Email == dto.Email);
         if (exists)
         {
@@ -60,6 +66,8 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponseDto> LoginAsync(LoginDto dto)
     {
+        ArgumentNullException.ThrowIfNull(dto);
+
         // Ensure the user exists and include their Role
         var user = await _db.Users
             .Include(u => u.Role)

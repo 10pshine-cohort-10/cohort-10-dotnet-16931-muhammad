@@ -7,7 +7,7 @@ public class RegisterDto
     [Required, MaxLength(100)]
     public string FullName { get; set; } = string.Empty;
 
-    [Required, EmailAddress]
+    [Required, EmailAddress, MaxLength(150)]
     public string Email { get; set; } = string.Empty;
 
     [Required, MinLength(6)]
